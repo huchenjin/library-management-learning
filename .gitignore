@@ -1,0 +1,15 @@
+.DS_Store
+.idea/
+.vscode/
+*.iml
+.env
+
+library-server/target/
+library-server/.classpath
+library-server/.project
+library-server/.settings/
+
+library-web/node_modules/
+library-web/dist/
+library-web/*.tsbuildinfo
+library-web/.eslintcache
