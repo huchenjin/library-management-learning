@@ -2,8 +2,12 @@ package com.example.library.controller;
 
 import com.example.library.common.ApiResponse;
 import com.example.library.common.LearningTaskNotImplementedException;
+import com.example.library.common.PageResponse;
+import com.example.library.dto.category.CategoryListItem;
 import com.example.library.dto.category.CategoryOption;
+import com.example.library.dto.category.CategoryQuery;
 import com.example.library.dto.learning.CategoryCommand;
+import com.example.library.service.BookService;
 import com.example.library.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +33,9 @@ public class CategoryController {
 
     @Operation(summary = "分类分页（LEARNING-1）")
     @GetMapping
-    public ApiResponse<Void> page() { throw task(); }
+    public ApiResponse<PageResponse<CategoryListItem>> page(@Valid @ModelAttribute CategoryQuery query) {
+        return  ApiResponse.success(categoryService.page(query));
+    }
 
     @Operation(summary = "新增分类（LEARNING-1）")
     @PostMapping

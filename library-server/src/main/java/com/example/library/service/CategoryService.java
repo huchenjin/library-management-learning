@@ -1,7 +1,13 @@
 package com.example.library.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.library.common.PageResponse;
+import com.example.library.dto.book.BookListItem;
+import com.example.library.dto.book.BookQuery;
+import com.example.library.dto.category.CategoryListItem;
 import com.example.library.dto.category.CategoryOption;
+import com.example.library.dto.category.CategoryQuery;
 import com.example.library.entity.BookCategory;
 import com.example.library.mapper.BookCategoryMapper;
 import java.util.List;
@@ -22,5 +28,10 @@ public class CategoryService {
                 .stream()
                 .map(category -> new CategoryOption(category.getId(), category.getName()))
                 .toList();
+    }
+
+    public PageResponse<CategoryListItem> page(CategoryQuery query) {
+        Page<CategoryListItem> page = new Page<>(query.getPage(), query.getSize());
+        return PageResponse.from(categoryMapper.selectCategoryPage(page, query));
     }
 }

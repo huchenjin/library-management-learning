@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.mapper.BookCategoryMapper">
+    <sql id="categoryColumns">
+        id, name, sort_no, status
+    </sql>
+
+    <select id="selectCategoryPage" resultType="com.example.library.dto.category.CategoryListItem">
+        SELECT <include refid="categoryColumns"/>
+        FROM book_category
+        WHERE deleted = 0
+        ORDER BY sort_no ASC, id DESC
+    </select>
+
+    <select id="selectCategoryDetail" resultType="com.example.library.dto.category.CategoryListItem">
+        SELECT <include refid="categoryColumns"/>
+        FROM book_category
+        WHERE id = #{id} AND deleted = 0
+    </select>
+</mapper>
