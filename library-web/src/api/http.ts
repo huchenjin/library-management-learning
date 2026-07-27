@@ -4,6 +4,10 @@ import router from '@/router'
 
 export const TOKEN_KEY = 'library_access_token'
 
+export function isNotImplementedError(error: unknown): boolean {
+  return axios.isAxiosError(error) && error.response?.status === 501
+}
+
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '',
   timeout: 10_000,

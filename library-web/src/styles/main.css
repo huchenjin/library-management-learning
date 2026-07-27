@@ -56,6 +56,44 @@ button, input { font: inherit; }
 .table-heading span { display: block; color: #8b97a8; font-size: 12px; margin-top: 4px; }
 .table-card .el-pagination { justify-content: flex-end; margin-top: 20px; }
 .warning { color: #d97706; font-weight: 700; }
+.management-page, .statistics-page { min-height: calc(100vh - 130px); }
+.learning-alert { margin-bottom: 16px; border-radius: 10px !important; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 18px; }
+.dialog-form { margin-top: 20px; }
+.primary-cell { color: #253044; font-weight: 600; }
+.secondary-cell { margin-top: 3px; color: #929daf; font-size: 12px; }
+.statistics-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.statistics-toolbar h2 { margin: 0 0 6px; color: #1d2c42; font-size: 20px; }
+.statistics-toolbar p { margin: 0; color: #8793a5; font-size: 13px; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 18px; }
+.metric-card { display: flex; align-items: center; gap: 18px; min-height: 142px; padding: 24px; background: white; border: 1px solid #e5eaf1; border-radius: 14px; box-shadow: 0 8px 22px rgba(23,45,75,.04); }
+.metric-icon { width: 52px; height: 52px; flex: 0 0 52px; display: grid; place-items: center; border-radius: 15px; }
+.metric-icon svg { width: 25px; height: 25px; }
+.metric-card span { display: block; color: #77859a; font-size: 13px; }
+.metric-card strong { display: block; margin: 7px 0 3px; color: #1e2d43; font-size: 30px; line-height: 1; }
+.metric-card small { color: #a0aaba; }
+.metric-card.teal .metric-icon { color: #158b78; background: #e5f7f3; }
+.metric-card.blue .metric-icon { color: #3978da; background: #eaf1fd; }
+.metric-card.violet .metric-icon { color: #7656c9; background: #f0ecfb; }
+.metric-card.amber .metric-icon { color: #c57a11; background: #fff3dc; }
+.statistics-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(320px, .8fr); gap: 18px; }
+.ranking-card, .overdue-card { border: 1px solid #e5eaf1 !important; border-radius: 14px !important; }
+.ranking-list { display: grid; }
+.ranking-item { display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 14px; padding: 16px 4px; border-bottom: 1px solid #edf0f4; }
+.ranking-item:last-child { border-bottom: 0; }
+.rank { width: 30px; height: 30px; display: grid; place-items: center; color: #7d899b; background: #edf1f5; border-radius: 9px; font-weight: 800; }
+.rank-1 { color: #a15b00; background: #ffe9b9; }
+.rank-2 { color: #536171; background: #e7ebf0; }
+.rank-3 { color: #8f552d; background: #f3ddcc; }
+.ranking-book strong, .ranking-book span, .ranking-count strong, .ranking-count span { display: block; }
+.ranking-book strong { color: #26354b; }
+.ranking-book span, .ranking-count span { margin-top: 4px; color: #929daf; font-size: 12px; }
+.ranking-count { text-align: right; }
+.ranking-count strong { color: #168c79; font-size: 20px; }
+.overdue-card .el-card__body { padding: 34px; text-align: center; }
+.overdue-value { color: #d34848; font-size: 64px; font-weight: 800; line-height: 1; }
+.overdue-card p { margin: 10px 0 28px; color: #69778b; }
+.overdue-tip { margin-top: 14px; color: #9aa4b3; font-size: 12px; }
 .placeholder-card { min-height: 480px; display: grid; place-items: center; text-align: center; padding-top: 70px; }
 .placeholder-card .el-card__body { max-width: 620px; }
 .placeholder-icon { width: 68px; height: 68px; display: grid; place-items: center; margin: 0 auto 18px; border-radius: 20px; background: #edf8f6; color: #15937e; font-size: 34px; }
@@ -64,3 +102,4 @@ button, input { font: inherit; }
 .placeholder-card ol { display: inline-block; text-align: left; color: #5d6c80; line-height: 2; }
 code { padding: 2px 6px; border-radius: 5px; background: #eef3f7; color: #126f63; }
 @media (max-width: 1250px) { .task-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 1300px) { .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

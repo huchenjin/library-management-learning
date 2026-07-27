@@ -7,7 +7,6 @@ import com.example.library.dto.category.CategoryListItem;
 import com.example.library.dto.category.CategoryOption;
 import com.example.library.dto.category.CategoryQuery;
 import com.example.library.dto.learning.CategoryCommand;
-import com.example.library.service.BookService;
 import com.example.library.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +38,10 @@ public class CategoryController {
 
     @Operation(summary = "新增分类（LEARNING-1）")
     @PostMapping
-    public ApiResponse<Void> create(@Valid @RequestBody CategoryCommand command) { throw task(); }
+    public ApiResponse<Void> create(@Valid @RequestBody CategoryCommand command) {
+        categoryService.create(command);
+        return ApiResponse.success("分类新增成功", null);
+    }
 
     @Operation(summary = "修改分类（LEARNING-1）")
     @PutMapping("/{id}")
