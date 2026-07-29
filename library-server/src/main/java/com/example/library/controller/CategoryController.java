@@ -49,7 +49,10 @@ public class CategoryController {
 
     @Operation(summary = "删除分类（LEARNING-1）")
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> delete(@PathVariable Long id) { throw task(); }
+    public ApiResponse<Void> delete(@PathVariable Long id) {
+        categoryService.delete(id);
+        return ApiResponse.success("删除成功", null);
+    }
 
     private LearningTaskNotImplementedException task() {
         // TODO(LEARNING-1): 完成分类 CRUD、唯一性和关联校验。

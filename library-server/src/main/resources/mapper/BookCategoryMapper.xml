@@ -17,4 +17,8 @@
         FROM book_category
         WHERE id = #{id} AND deleted = 0
     </select>
+    <delete id="deleteById">
+        DELETE FROM book_category WHERE id = #{id}
+    </delete>
+
 </mapper>

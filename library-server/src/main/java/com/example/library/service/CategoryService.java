@@ -63,4 +63,8 @@ public class CategoryService {
             throw new BusinessException(ErrorCode.CONFLICT, "分类名称已存在");
         }
     }
+
+    public int delete(Long id) {
+        return categoryMapper.deleteById(id);
+    }
 }
