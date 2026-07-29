@@ -45,7 +45,10 @@ public class CategoryController {
 
     @Operation(summary = "修改分类（LEARNING-1）")
     @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id, @Valid @RequestBody CategoryCommand command) { throw task(); }
+    public ApiResponse<Void> update(@PathVariable Long id, @Valid @RequestBody CategoryCommand command) {
+        categoryService.update(id, command);
+        return ApiResponse.success("分类新增成功", null);
+    }
 
     @Operation(summary = "删除分类（LEARNING-1）")
     @DeleteMapping("/{id}")

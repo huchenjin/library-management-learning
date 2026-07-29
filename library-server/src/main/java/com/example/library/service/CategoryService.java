@@ -11,16 +11,26 @@ import com.example.library.dto.category.CategoryQuery;
 import com.example.library.dto.learning.CategoryCommand;
 import com.example.library.entity.BookCategory;
 import com.example.library.mapper.BookCategoryMapper;
+
 import java.util.List;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import com.example.library.entity.Book;
+import com.example.library.mapper.BookMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
-    private final BookCategoryMapper categoryMapper;
 
-    public CategoryService(BookCategoryMapper categoryMapper) {
+    private final BookCategoryMapper categoryMapper;
+    private final BookMapper bookMapper;
+
+    public CategoryService(
+            BookCategoryMapper categoryMapper,
+            BookMapper bookMapper) {
         this.categoryMapper = categoryMapper;
+        this.bookMapper = bookMapper;
     }
 
     public List<CategoryOption> options() {
@@ -64,7 +74,77 @@ public class CategoryService {
         }
     }
 
-    public int delete(Long id) {
-        return categoryMapper.deleteById(id);
+    public void update(Long id, CategoryCommand command) {
+        // 1. 查询目标分类，同时会自动排除已逻辑删除的数据
+        BookCategory category = categoryMapper.selectById(id);
+        if (category == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "分类不存在");
+        }
+
+        // 2. 统一处理名称，避免“文学”和“ 文学 ”被当成不同输入
+        String normalizedName = command.name().strip();
+
+        // 3. 检查其他分类是否使用了这个名称
+        boolean nameExists = categoryMapper.exists(
+                new LambdaQueryWrapper<BookCategory>()
+                        .eq(BookCategory::getName, normalizedName)
+                        .ne(BookCategory::getId, id)
+        );
+
+        if (nameExists) {
+            throw new BusinessException(ErrorCode.CONFLICT, "分类名称已存在");
+        }
+
+        // 4. 更新允许修改的字段
+        category.setName(normalizedName);
+        category.setSortNo(command.sortNo());
+        category.setStatus(command.status());
+
+        try {
+            // 5. 根据实体中的 ID 更新
+            int affectedRows = categoryMapper.updateById(category);
+
+            if (affectedRows != 1) {
+                throw new BusinessException(ErrorCode.NOT_FOUND, "分类不存在");
+            }
+        } catch (DuplicateKeyException exception) {
+            // exists 负责友好提示，数据库唯一索引负责处理并发竞争
+            throw new BusinessException(ErrorCode.CONFLICT, "分类名称已存在");
+        }
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        // 1. 判断分类是否存在
+        BookCategory category = categoryMapper.selectById(id);
+        if (category == null) {
+            throw new BusinessException(
+                    ErrorCode.NOT_FOUND,
+                    "分类不存在"
+            );
+        }
+
+        // 2. 判断是否被未删除的图书引用
+        boolean referenced = bookMapper.exists(
+                new LambdaQueryWrapper<Book>()
+                        .eq(Book::getCategoryId, id)
+        );
+
+        if (referenced) {
+            throw new BusinessException(
+                    ErrorCode.CONFLICT,
+                    "该分类已被图书引用，不能删除"
+            );
+        }
+
+        // 3. 执行逻辑删除
+        int affectedRows = categoryMapper.deleteById(id);
+
+        if (affectedRows != 1) {
+            throw new BusinessException(
+                    ErrorCode.NOT_FOUND,
+                    "分类不存在"
+            );
+        }
     }
 }

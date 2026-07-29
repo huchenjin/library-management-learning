@@ -59,4 +59,56 @@ class CategoryServiceTest {
         assertEquals(ErrorCode.CONFLICT, exception.getErrorCode());
         assertEquals("分类名称已存在", exception.getMessage());
     }
+
+    @Test
+    void shouldUpdateCategory() {
+        BookCategory existing = new BookCategory();
+        existing.setId(1L);
+        existing.setName("文学");
+
+        when(mapper.selectById(1L)).thenReturn(existing);
+        when(mapper.exists(any())).thenReturn(false);
+        when(mapper.updateById(any(BookCategory.class))).thenReturn(1);
+
+        service.update(1L, new CategoryCommand("  哲学  ", 50, 1));
+
+        assertEquals("哲学", existing.getName());
+        assertEquals(50, existing.getSortNo());
+        assertEquals(1, existing.getStatus());
+        verify(mapper).updateById(existing);
+    }
+
+    @Test
+    void shouldRejectMissingCategoryWhenUpdating() {
+        when(mapper.selectById(999L)).thenReturn(null);
+
+        BusinessException exception = assertThrows(
+                BusinessException.class,
+                () -> service.update(
+                        999L,
+                        new CategoryCommand("哲学", 50, 1)
+                )
+        );
+
+        assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    void shouldRejectDuplicateNameWhenUpdating() {
+        BookCategory existing = new BookCategory();
+        existing.setId(1L);
+
+        when(mapper.selectById(1L)).thenReturn(existing);
+        when(mapper.exists(any())).thenReturn(true);
+
+        BusinessException exception = assertThrows(
+                BusinessException.class,
+                () -> service.update(
+                        1L,
+                        new CategoryCommand("计算机", 50, 1)
+                )
+        );
+
+        assertEquals(ErrorCode.CONFLICT, exception.getErrorCode());
+    }
 }
